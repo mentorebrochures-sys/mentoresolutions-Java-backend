@@ -1,31 +1,29 @@
 const supabase = require('../supabaseClient');
 
-// 1. Sagle courses milavne
+// 1. Sagle courses milavne (Correct aahe)
 exports.getAll = async (req, res) => {
-    // Table name changed to 'courses1'
-    const { data, error } = await supabase.from('courses1').select('*');
+    const { data, error } = await supabase.from('courses').select('*');
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 };
 
-// 2. Navin course add karne
+// 2. Navin course add karne (Mi mashi sangitlyapramane update kela aahe)
 exports.create = async (req, res) => {
-    // Fields changed to duration1 and start_date1
-    const { duration1, start_date1 } = req.body; 
+    const { duration, start_date } = req.body; 
     const { data, error } = await supabase
-        .from('courses1')
-        .insert([{ duration1, start_date1 }])
-        .select(); 
+        .from('courses')
+        .insert([{ duration, start_date }])
+        .select(); // Insert nantar data parat milavnyasathi .select() garjeche aahe
 
     if (error) return res.status(400).json({ error: error.message });
     res.status(201).json(data);
 };
 
-// 3. Update karne
+// 3. Update karne (Ithe .select() add kela aahe jyamule updated data return hoil)
 exports.update = async (req, res) => {
     const { data, error } = await supabase
-        .from('courses1')
-        .update(req.body) // req.body madhe duration1 kiva start_date1 asne garjeche aahe
+        .from('courses')
+        .update(req.body)
         .eq('id', req.params.id)
         .select();
 
@@ -33,10 +31,10 @@ exports.update = async (req, res) => {
     res.json(data);
 };
 
-// 4. Delete karne
+// 4. Delete karne (Correct aahe)
 exports.delete = async (req, res) => {
     const { error } = await supabase
-        .from('courses1')
+        .from('courses')
         .delete()
         .eq('id', req.params.id);
 
