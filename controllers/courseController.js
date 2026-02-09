@@ -1,34 +1,29 @@
 const supabase = require('../supabaseClient');
 
-// Using a constant so you only have to change the table name in one place
-const TABLE_NAME = 'courses1';
-
-// 1. Get all records (Updated table name)
+// 1. Sagle courses milavne (Correct aahe)
 exports.getAll = async (req, res) => {
-    const { data, error } = await supabase.from(TABLE_NAME).select('*');
+    const { data, error } = await supabase.from('courses').select('*');
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 };
 
-// 2. Create new record (Updated table name and column names)
+// 2. Navin course add karne (Mi mashi sangitlyapramane update kela aahe)
 exports.create = async (req, res) => {
-    // Note: Use duration1 and start_date1 to match your new table schema
-    const { duration1, start_date1 } = req.body; 
-    
+    const { duration, start_date } = req.body; 
     const { data, error } = await supabase
-        .from(TABLE_NAME)
-        .insert([{ duration1, start_date1 }])
-        .select(); 
+        .from('courses')
+        .insert([{ duration, start_date }])
+        .select(); // Insert nantar data parat milavnyasathi .select() garjeche aahe
 
     if (error) return res.status(400).json({ error: error.message });
     res.status(201).json(data);
 };
 
-// 3. Update record (Updated table name)
+// 3. Update karne (Ithe .select() add kela aahe jyamule updated data return hoil)
 exports.update = async (req, res) => {
     const { data, error } = await supabase
-        .from(TABLE_NAME)
-        .update(req.body) // Ensure req.body contains duration1 or start_date1
+        .from('courses')
+        .update(req.body)
         .eq('id', req.params.id)
         .select();
 
@@ -36,10 +31,10 @@ exports.update = async (req, res) => {
     res.json(data);
 };
 
-// 4. Delete record (Updated table name)
+// 4. Delete karne (Correct aahe)
 exports.delete = async (req, res) => {
     const { error } = await supabase
-        .from(TABLE_NAME)
+        .from('courses')
         .delete()
         .eq('id', req.params.id);
 
