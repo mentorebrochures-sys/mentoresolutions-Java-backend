@@ -11,7 +11,6 @@ app.use(express.json());
 app.use('/api/certificates', require('./routes/certificateRoutes'));
 app.use('/api/contacts', require('./routes/contactRoutes'));
 app.use('/api/java-courses', require('./routes/javaCourseRoutes'));
-app.use('/api/placements', require('./routes/placementRoutes'));
 app.use('/api/trainings', require('./routes/trainingRoutes'));
 
 app.get('/', (req, res) => {
