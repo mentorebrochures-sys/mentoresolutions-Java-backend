@@ -1,33 +1,29 @@
 const supabase = require('../supabaseClient');
 
-// 1. Sagle Java courses milavne
+// 1. Sagle courses milavne (Correct aahe)
 exports.getAll = async (req, res) => {
-    const { data, error } = await supabase.from('courses1').select('*');
+    const { data, error } = await supabase.from('courses').select('*');
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 };
 
-// 2. Navin Java course add karne
+// 2. Navin course add karne (Mi mashi sangitlyapramane update kela aahe)
 exports.create = async (req, res) => {
-    const { duration1, start_date1 } = req.body; 
+    const { duration, start_date } = req.body; 
     const { data, error } = await supabase
-        .from('courses1')
-        .insert([{ duration1, start_date1 }])
-        .select();
+        .from('courses')
+        .insert([{ duration, start_date }])
+        .select(); // Insert nantar data parat milavnyasathi .select() garjeche aahe
 
     if (error) return res.status(400).json({ error: error.message });
     res.status(201).json(data);
 };
 
-// 3. Java course update karne
+// 3. Update karne (Ithe .select() add kela aahe jyamule updated data return hoil)
 exports.update = async (req, res) => {
-    // ID update karnyacha prayatna karu naye mhanun body madun to kadhla aahe
-    const updateData = { ...req.body };
-    delete updateData.id; 
-
     const { data, error } = await supabase
-        .from('courses1')
-        .update(updateData)
+        .from('courses')
+        .update(req.body)
         .eq('id', req.params.id)
         .select();
 
@@ -35,13 +31,13 @@ exports.update = async (req, res) => {
     res.json(data);
 };
 
-// 4. Java course delete karne
+// 4. Delete karne (Correct aahe)
 exports.delete = async (req, res) => {
     const { error } = await supabase
-        .from('courses1')
+        .from('courses')
         .delete()
         .eq('id', req.params.id);
 
     if (error) return res.status(400).json({ error: error.message });
-    res.json({ message: "Java Course Deleted Successfully" });
+    res.json({ message: "Course Deleted Successfully" });
 };
