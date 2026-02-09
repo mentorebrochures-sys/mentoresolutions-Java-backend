@@ -1,28 +1,29 @@
 const supabase = require('../supabaseClient');
 
-// 1. Sagle courses milavne (Correct aahe)
+// 1. Get all Java courses
 exports.getAll = async (req, res) => {
-    const { data, error } = await supabase.from('courses').select('*');
+    const { data, error } = await supabase.from('courses1').select('*');
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 };
 
-// 2. Navin course add karne (Mi mashi sangitlyapramane update kela aahe)
+// 2. Create Java course
 exports.create = async (req, res) => {
-    const { duration, start_date } = req.body; 
+    // Database madhe 'duration1' ani 'start_date1' naave aahet
+    const { duration1, start_date1 } = req.body; 
     const { data, error } = await supabase
-        .from('courses')
-        .insert([{ duration, start_date }])
-        .select(); // Insert nantar data parat milavnyasathi .select() garjeche aahe
+        .from('courses1')
+        .insert([{ duration1, start_date1 }])
+        .select();
 
     if (error) return res.status(400).json({ error: error.message });
     res.status(201).json(data);
 };
 
-// 3. Update karne (Ithe .select() add kela aahe jyamule updated data return hoil)
+// 3. Update Java course
 exports.update = async (req, res) => {
     const { data, error } = await supabase
-        .from('courses')
+        .from('courses1')
         .update(req.body)
         .eq('id', req.params.id)
         .select();
@@ -31,13 +32,13 @@ exports.update = async (req, res) => {
     res.json(data);
 };
 
-// 4. Delete karne (Correct aahe)
+// 4. Delete Java course
 exports.delete = async (req, res) => {
     const { error } = await supabase
-        .from('courses')
+        .from('courses1')
         .delete()
         .eq('id', req.params.id);
 
     if (error) return res.status(400).json({ error: error.message });
-    res.json({ message: "Course Deleted Successfully" });
+    res.json({ message: "Java Course Deleted Successfully" });
 };
