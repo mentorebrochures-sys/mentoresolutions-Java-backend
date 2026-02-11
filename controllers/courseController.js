@@ -1,41 +1,25 @@
 const supabase = require('../supabaseClient');
 
-// 1. Sagle courses milavne
+// 1. Sagle courses milavne (Correct aahe)
 exports.getAll = async (req, res) => {
     const { data, error } = await supabase.from('courses').select('*');
     if (error) return res.status(400).json({ error: error.message });
     res.json(data);
 };
 
-// 2. Navin course add karne (Course Name sobat)
+// 2. Navin course add karne (Mi mashi sangitlyapramane update kela aahe)
 exports.create = async (req, res) => {
-    // req.body madhe aata course_name (Java/DevOps) pan pathva
-    const { duration, start_date, course_name } = req.body; 
-    
+    const { duration, start_date } = req.body; 
     const { data, error } = await supabase
         .from('courses')
-        .insert([{ duration, start_date, course_name }]) // Ithe course_name add kela
-        .select();
+        .insert([{ duration, start_date }])
+        .select(); // Insert nantar data parat milavnyasathi .select() garjeche aahe
 
     if (error) return res.status(400).json({ error: error.message });
     res.status(201).json(data);
 };
 
-// 3. Particular Course Fetch karne (User Panel sathi)
-// He function tula Java ani DevOps filter karayla madat karel
-exports.getByName = async (req, res) => {
-    const { name } = req.params; // URL madhun 'java' kiwa 'devops' ghyayche
-    const { data, error } = await supabase
-        .from('courses')
-        .select('*')
-        .eq('course_name', name)
-        .single(); // Fakt ekch record pahije
-
-    if (error) return res.status(400).json({ error: error.message });
-    res.json(data);
-};
-
-// 4. Update karne (Same as your code)
+// 3. Update karne (Ithe .select() add kela aahe jyamule updated data return hoil)
 exports.update = async (req, res) => {
     const { data, error } = await supabase
         .from('courses')
@@ -47,7 +31,7 @@ exports.update = async (req, res) => {
     res.json(data);
 };
 
-// 5. Delete karne (Same as your code)
+// 4. Delete karne (Correct aahe)
 exports.delete = async (req, res) => {
     const { error } = await supabase
         .from('courses')
