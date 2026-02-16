@@ -10,7 +10,7 @@ app.use(express.json());
 // Routes
 app.use('/api/certificates', require('./routes/certificateRoutes'));
 app.use('/api/contacts', require('./routes/contactRoutes'));
-app.use('/api/courses', require('./routes/courseRoutes'));
+app.use('/api/java-courses', require('./routes/javaRoutes'));
 app.use('/api/placements', require('./routes/placementRoutes'));
 app.use('/api/trainings', require('./routes/trainingRoutes'));
 
