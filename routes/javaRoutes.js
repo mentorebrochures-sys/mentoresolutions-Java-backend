@@ -1,10 +1,9 @@
 const router = require('express').Router();
 const courseCtrl = require('../controllers/javacourseController');
 
-// Fakt Java Course sathi Routes
-router.get('/', courseCtrl.getJavaAll);      // Java table madhun data fetch karel
-router.post('/', courseCtrl.createJava);    // Java table madhe navin entry karel
-router.put('/:id', courseCtrl.updateJava);  // Java table madhla record update karel
-router.delete('/:id', courseCtrl.deleteJava); // Java table madhla record delete karel
+router.get('/', courseCtrl.getJavaAll);
+router.post('/', courseCtrl.createJava);
+router.put('/:id', courseCtrl.updateJava);
+router.delete('/:id', courseCtrl.deleteJava);
 
 module.exports = router;
