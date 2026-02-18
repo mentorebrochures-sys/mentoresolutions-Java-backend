@@ -1,85 +1,37 @@
 const supabase = require('../supabaseClient');
 
-// ==========================
-// GET ALL JAVA COURSES
-// ==========================
-exports.getJavaAll = async (req, res) => {
-    try {
-        const { data, error } = await supabase
-            .from('java_course')
-            .select('*')
-            .order('id', { ascending: false });
+// 1. Java Course chi mahiti milavne
+exports.getJavaCourse = async (req, res) => {
+    const { data, error } = await supabase
+        .from('java_course')
+        .select('*');
 
-        if (error) throw error;
-
-        res.status(200).json(data);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
 };
 
+// 2. Java Course One-Time Create karne
+exports.createJavaCourse = async (req, res) => {
+    // req.body madhe duration2 ani start_date2 asave
+    const { data, error } = await supabase
+        .from('java_course')
+        .insert([req.body])
+        .select();
 
-// ==========================
-// CREATE JAVA COURSE
-// ==========================
-exports.createJava = async (req, res) => {
-    try {
-        const { duration2, start_date2 } = req.body;
-
-        if (!duration2 || !start_date2) {
-            return res.status(400).json({ error: "All fields are required" });
-        }
-
-        const { data, error } = await supabase
-            .from('java_course')
-            .insert([{ duration2, start_date2 }])
-            .select();
-
-        if (error) throw error;
-
-        res.status(201).json(data);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+    if (error) return res.status(400).json({ error: error.message });
+    res.status(201).json(data);
 };
 
+// 3. Java Course Update karne (Fakt details badalnyasathi)
+exports.updateJavaCourse = async (req, res) => {
+    const { id } = req.params; 
 
-// ==========================
-// UPDATE JAVA COURSE
-// ==========================
-exports.updateJava = async (req, res) => {
-    try {
-        const { duration2, start_date2 } = req.body;
+    const { data, error } = await supabase
+        .from('java_course')
+        .update(req.body)
+        .eq('id', id)
+        .select();
 
-        const { data, error } = await supabase
-            .from('java_course')
-            .update({ duration2, start_date2 })
-            .eq('id', req.params.id)
-            .select();
-
-        if (error) throw error;
-
-        res.status(200).json(data);
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-};
-
-
-// ==========================
-// DELETE JAVA COURSE
-// ==========================
-exports.deleteJava = async (req, res) => {
-    try {
-        const { error } = await supabase
-            .from('java_course')
-            .delete()
-            .eq('id', req.params.id);
-
-        if (error) throw error;
-
-        res.status(200).json({ message: "Java Course Deleted Successfully" });
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
 };
