@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const javaCourseCtrl = require('../controllers/javaCourseController');
+const javaCourseCtrl = require('../controllers/javacourseController');
 
 // 1. Java course chi mahiti milavne
 router.get('/', javaCourseCtrl.getJavaCourse);
