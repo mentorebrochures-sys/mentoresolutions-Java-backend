@@ -1,27 +1,28 @@
 const supabase = require('../supabaseClient');
 
-// 1. Get Java Course (Always first record)
+// 1. DATA LOAD KARNE (Fakt Pahila Record)
 exports.getJavaCourse = async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('java_course')
             .select('*')
-            .limit(1)
-            .single();
+            .limit(1); // Ekach row pahije
 
-        // Jar data nasel tar null pathva, error nako
-        res.status(200).json(data || {});
+        if (error) throw error;
+        // Jar data nasel tar empty object {} pathva
+        res.status(200).json(data.length > 0 ? data[0] : {});
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
 
-// 2. Save or Update Java Course (One-time Logic)
+// 2. DATA SAVE/UPDATE KARNE (Upsert Logic)
 exports.saveJavaCourse = async (req, res) => {
     try {
-        const { duration2, start_date2, id } = req.body;
-        let result;
+        const { id, duration2, start_date2 } = req.body;
+        console.log("Saving Java Data:", req.body);
 
+        let result;
         if (id) {
             // Jar ID asel tar UPDATE kara
             result = await supabase
@@ -30,7 +31,7 @@ exports.saveJavaCourse = async (req, res) => {
                 .eq('id', id)
                 .select();
         } else {
-            // Jar ID nasel tar pahilyanda INSERT kara
+            // Jar ID nasel tar INSERT kara
             result = await supabase
                 .from('java_course')
                 .insert([{ duration2, start_date2 }])
@@ -38,9 +39,9 @@ exports.saveJavaCourse = async (req, res) => {
         }
 
         if (result.error) throw result.error;
-        res.status(200).json({ message: "Java Course Successfully Synced!", data: result.data });
+        res.status(200).json({ message: "Database Synced Successfully! ✅", data: result.data[0] });
     } catch (err) {
-        console.error("Save Error:", err.message);
+        console.error("Supabase Error:", err.message);
         res.status(500).json({ error: err.message });
     }
 };
