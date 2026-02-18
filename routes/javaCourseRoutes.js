@@ -1,13 +1,7 @@
 const router = require('express').Router();
-const javaCourseCtrl = require('../controllers/javacourseController');
+const javaCtrl = require('../controllers/javacourseController');
 
-// 1. Java course chi mahiti milavne
-router.get('/', javaCourseCtrl.getJavaCourse);
-
-// 2. Navin java course record tayar karne (One-time use)
-router.post('/', javaCourseCtrl.createJavaCourse);
-
-// 3. Existing java course update karne (ID vaprun)
-router.put('/:id', javaCourseCtrl.updateJavaCourse);
+router.get('/', javaCtrl.getJavaCourse);
+router.post('/', javaCtrl.saveJavaCourse); // Ekach POST route update ani add donhi karel
 
 module.exports = router;
