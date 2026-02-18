@@ -1,7 +1,7 @@
-const express = require('express').Router;
+const express = require('express');
 const router = express.Router();
-// Import kartana exact file naav vapra
-const javaCourseController = require('../controllers/javacourseController');
+// Import kartana file name neet check kara
+const javaCourseController = require('../controllers/javaCourseController');
 
 router.get('/', javaCourseController.getJavaCourse);
 router.post('/', javaCourseController.createJavaCourse);
