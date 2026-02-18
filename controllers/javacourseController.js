@@ -1,47 +1,57 @@
 const supabase = require('../supabaseClient');
 
-// 1. DATA LOAD KARNE (Fakt Pahila Record)
+// 1. Get Java Course Data
 exports.getJavaCourse = async (req, res) => {
     try {
-        const { data, error } = await supabase
-            .from('java_course')
-            .select('*')
-            .limit(1); // Ekach row pahije
-
+        const { data, error } = await supabase.from('java_course').select('*');
         if (error) throw error;
-        // Jar data nasel tar empty object {} pathva
-        res.status(200).json(data.length > 0 ? data[0] : {});
+        res.status(200).json(data);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(400).json({ error: err.message });
     }
 };
 
-// 2. DATA SAVE/UPDATE KARNE (Upsert Logic)
-exports.saveJavaCourse = async (req, res) => {
+// 2. Create Java Course
+exports.createJavaCourse = async (req, res) => {
     try {
-        const { id, duration2, start_date2 } = req.body;
-        console.log("Saving Java Data:", req.body);
+        // Table columns: duration2, start_date2
+        const { duration2, start_date2 } = req.body;
+        const { data, error } = await supabase
+            .from('java_course')
+            .insert([{ duration2, start_date2 }])
+            .select();
 
-        let result;
-        if (id) {
-            // Jar ID asel tar UPDATE kara
-            result = await supabase
-                .from('java_course')
-                .update({ duration2, start_date2 })
-                .eq('id', id)
-                .select();
-        } else {
-            // Jar ID nasel tar INSERT kara
-            result = await supabase
-                .from('java_course')
-                .insert([{ duration2, start_date2 }])
-                .select();
-        }
-
-        if (result.error) throw result.error;
-        res.status(200).json({ message: "Database Synced Successfully! ✅", data: result.data[0] });
+        if (error) throw error;
+        res.status(201).json(data);
     } catch (err) {
-        console.error("Supabase Error:", err.message);
-        res.status(500).json({ error: err.message });
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// 3. Update Java Course
+exports.updateJavaCourse = async (req, res) => {
+    try {
+        const { duration2, start_date2 } = req.body;
+        const { data, error } = await supabase
+            .from('java_course')
+            .update({ duration2, start_date2 })
+            .eq('id', req.params.id)
+            .select();
+
+        if (error) throw error;
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+// 4. Delete Java Course
+exports.deleteJavaCourse = async (req, res) => {
+    try {
+        const { error } = await supabase.from('java_course').delete().eq('id', req.params.id);
+        if (error) throw error;
+        res.status(200).json({ message: "Deleted" });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 };

@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const javaCtrl = require('../controllers/javacourseController');
+const javaCtrl = require('../controllers/javaCourseController');
 
 router.get('/', javaCtrl.getJavaCourse);
-router.post('/', javaCtrl.saveJavaCourse); // Ekach POST route update ani add donhi karel
+router.post('/', javaCtrl.createJavaCourse);
+router.put('/:id', javaCtrl.updateJavaCourse);
+router.delete('/:id', javaCtrl.deleteJavaCourse);
 
 module.exports = router;
