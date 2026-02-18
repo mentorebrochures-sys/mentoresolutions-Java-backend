@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require('express').Router;
 const router = express.Router();
-// PATH CHECK: File name exact match pahije (C and R capital)
-const javaCourseController = require('../controllers/javaCourseController');
+// Import kartana exact file naav vapra
+const javaCourseController = require('../controllers/javacourseController');
 
 router.get('/', javaCourseController.getJavaCourse);
 router.post('/', javaCourseController.createJavaCourse);
