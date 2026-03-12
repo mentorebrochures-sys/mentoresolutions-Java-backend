@@ -7,18 +7,10 @@ exports.getAll = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    const { duration, start_date, batch_time } = req.body; 
-
-    // FIX: If batch_time is null, undefined, or empty string, use "TBA"
-    const final_batch_time = batch_time && batch_time.trim() !== "" ? batch_time : "TBA";
-
+    const { duration, start_date } = req.body; 
     const { data, error } = await supabase
         .from('java_courses')
-        .insert([{ 
-            duration, 
-            start_date, 
-            batch_time: final_batch_time // Use the safe value here
-        }])
+        .insert([{ duration, start_date }])
         .select();
 
     if (error) return res.status(400).json({ error: error.message });
@@ -26,16 +18,9 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
-    // If the user clears the input in update, we also check it here
-    const updateData = { ...req.body };
-    
-    if (updateData.hasOwnProperty('batch_time') && (!updateData.batch_time || updateData.batch_time.trim() === "")) {
-        updateData.batch_time = "TBA";
-    }
-
     const { data, error } = await supabase
         .from('java_courses')
-        .update(updateData)
+        .update(req.body)
         .eq('id', req.params.id)
         .select();
 
