@@ -7,10 +7,12 @@ exports.getAll = async (req, res) => {
 };
 
 exports.create = async (req, res) => {
-    const { duration, start_date } = req.body; 
+    // १. रिक्वेस्ट बॉडीमधून batch_time सुद्धा घ्या
+    const { duration, start_date, batch_time } = req.body; 
+
     const { data, error } = await supabase
         .from('java_courses')
-        .insert([{ duration, start_date }])
+        .insert([{ duration, start_date, batch_time }]) // २. इथे batch_time ॲड करा
         .select();
 
     if (error) return res.status(400).json({ error: error.message });
@@ -18,6 +20,7 @@ exports.create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
+    // update मध्ये req.body वापरल्यामुळे तिथे batch_time असेल तर तो आपोआप अपडेट होईल
     const { data, error } = await supabase
         .from('java_courses')
         .update(req.body)
