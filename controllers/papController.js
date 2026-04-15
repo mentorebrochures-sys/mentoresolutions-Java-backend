@@ -13,11 +13,13 @@ exports.getAll = async (req, res) => {
 
 // 2. Create New PAP Step
 exports.create = async (req, res) => {
-    const { title, description, status } = req.body; 
+    // status काढून टाकले आहे
+    const { title, description } = req.body; 
 
+    // इन्सर्ट करताना फक्त title आणि description पाठवा
     const { data, error } = await supabase
         .from('pap_steps')
-        .insert([{ title, description, status }])
+        .insert([{ title, description }])
         .select();
 
     if (error) return res.status(400).json({ error: error.message });
@@ -26,9 +28,11 @@ exports.create = async (req, res) => {
 
 // 3. Update PAP Step
 exports.update = async (req, res) => {
+    const { title, description } = req.body;
+
     const { data, error } = await supabase
         .from('pap_steps')
-        .update(req.body) // Automatically handles title, description, or status
+        .update({ title, description }) // फक्त title आणि description अपडेट होईल
         .eq('id', req.params.id)
         .select();
 
