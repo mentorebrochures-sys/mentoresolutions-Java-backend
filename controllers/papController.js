@@ -1,46 +1,48 @@
 const supabase = require('../supabaseClient');
 
-exports.getAllSteps = async (req, res) => {
+// 1. Get all PAP Steps
+exports.getAll = async (req, res) => {
     const { data, error } = await supabase
         .from('pap_steps')
         .select('*')
         .order('id', { ascending: true });
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(200).json(data);
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
 };
 
-exports.addStep = async (req, res) => {
-    const { title, description, status } = req.body;
+// 2. Create New PAP Step
+exports.create = async (req, res) => {
+    const { title, description, status } = req.body; 
+
     const { data, error } = await supabase
         .from('pap_steps')
         .insert([{ title, description, status }])
         .select();
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(201).json({ message: "Step Added!", data });
+    if (error) return res.status(400).json({ error: error.message });
+    res.status(201).json(data);
 };
 
-exports.updateStep = async (req, res) => {
-    const { id } = req.params;
-    const { title, description, status } = req.body;
+// 3. Update PAP Step
+exports.update = async (req, res) => {
     const { data, error } = await supabase
         .from('pap_steps')
-        .update({ title, description, status })
-        .eq('id', id)
+        .update(req.body) // Automatically handles title, description, or status
+        .eq('id', req.params.id)
         .select();
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(200).json({ message: "Step Updated!", data });
+    if (error) return res.status(400).json({ error: error.message });
+    res.json(data);
 };
 
-exports.deleteStep = async (req, res) => {
-    const { id } = req.params;
+// 4. Delete PAP Step
+exports.delete = async (req, res) => {
     const { error } = await supabase
         .from('pap_steps')
         .delete()
-        .eq('id', id);
+        .eq('id', req.params.id);
 
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(200).json({ message: "Step Deleted!" });
+    if (error) return res.status(400).json({ error: error.message });
+    res.json({ message: "PAP Step Deleted Successfully" });
 };
